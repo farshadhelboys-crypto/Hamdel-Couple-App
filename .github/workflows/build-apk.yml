@@ -1,0 +1,54 @@
+name: Build Hamdel APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main", "master"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate launcher icons
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
+          for dens in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            case $dens in
+              mdpi) sz=48;;
+              hdpi) sz=72;;
+              xhdpi) sz=96;;
+              xxhdpi) sz=144;;
+              xxxhdpi) sz=192;;
+            esac
+            mkdir -p android/app/src/main/res/mipmap-$dens
+            convert -size ${sz}x${sz} xc:'#FF6B9D' android/app/src/main/res/mipmap-$dens/ic_launcher.png
+          done
+          ls -la android/app/src/main/res/mipmap-*/
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Build Debug APK
+        working-directory: android
+        run: |
+          gradle assembleDebug --no-daemon --stacktrace --console=plain
+          ls -lh app/build/outputs/apk/debug/
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hamdel-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
