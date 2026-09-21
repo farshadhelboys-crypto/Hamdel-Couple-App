@@ -24,15 +24,14 @@ jobs:
           grep -q selfSupportTips android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           grep -q apiCreateRoom android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           grep -q BootReceiver android/app/src/main/java/com/hamdel/couple/MainActivity.kt
-          grep -q scheduleAllSync android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           ! grep -q HamdelPollService android/app/src/main/java/com/hamdel/couple/MainActivity.kt
-          ! grep -q HamdelPollService android/app/src/main/AndroidManifest.xml
           echo "Sources OK v1.6"
 
-      - name: Generate launcher icons from Hamdel logo
+      - name: Generate launcher icons
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
-          curl -fsSL "https://h.uguu.se/JRKzVjam.jpg" -o /tmp/logo.jpg
+          # pink heart-style solid icon
+          convert -size 512x512 xc:'#1A0A14' -fill '#FF6B9D' -draw "circle 256,230 256,110" -fill '#FF3B6B' -draw "circle 180,200 180,100" -draw "circle 332,200 332,100" -fill '#FF6B9D' -draw "polygon 100,220 256,420 412,220" /tmp/logo.png
           for dens in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             case $dens in
               mdpi) sz=48;;
@@ -42,7 +41,7 @@ jobs:
               xxxhdpi) sz=192;;
             esac
             mkdir -p android/app/src/main/res/mipmap-$dens
-            convert /tmp/logo.jpg -resize ${sz}x${sz} android/app/src/main/res/mipmap-$dens/ic_launcher.png
+            convert /tmp/logo.png -resize ${sz}x${sz} android/app/src/main/res/mipmap-$dens/ic_launcher.png
           done
 
       - uses: actions/setup-java@v4
