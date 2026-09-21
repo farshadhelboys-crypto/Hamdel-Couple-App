@@ -14,24 +14,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Kotlin sources v1.6
+      - name: Fetch Kotlin sources v1.6.2
         run: |
           set -e
           mkdir -p android/app/src/main/java/com/hamdel/couple
           curl -fsSL "https://n.uguu.se/NPiQXbxu.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          # patch LOGO_URL to original logo
+          sed -i 's|const val LOGO_URL = ".*"|const val LOGO_URL = "https://d.uguu.se/SQpyLyMb.png"|' android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           curl -fsSL "https://h.uguu.se/MtMHWzEd.kt" -o android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           wc -c android/app/src/main/java/com/hamdel/couple/*.kt
           grep -q selfSupportTips android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
-          grep -q apiCreateRoom android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          grep -q SQpyLyMb android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           grep -q BootReceiver android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           ! grep -q HamdelPollService android/app/src/main/java/com/hamdel/couple/MainActivity.kt
-          echo "Sources OK v1.6"
+          echo "Sources OK v1.6.2"
 
-      - name: Generate launcher icons
+      - name: Restore original Hamdel logo icons
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
-          # pink heart-style solid icon
-          convert -size 512x512 xc:'#1A0A14' -fill '#FF6B9D' -draw "circle 256,230 256,110" -fill '#FF3B6B' -draw "circle 180,200 180,100" -draw "circle 332,200 332,100" -fill '#FF6B9D' -draw "polygon 100,220 256,420 412,220" /tmp/logo.png
+          curl -fsSL "https://d.uguu.se/SQpyLyMb.png" -o /tmp/logo.png
+          file /tmp/logo.png || true
           for dens in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             case $dens in
               mdpi) sz=48;;
@@ -43,6 +45,7 @@ jobs:
             mkdir -p android/app/src/main/res/mipmap-$dens
             convert /tmp/logo.png -resize ${sz}x${sz} android/app/src/main/res/mipmap-$dens/ic_launcher.png
           done
+          ls -la android/app/src/main/res/mipmap-*/ic_launcher.png
 
       - uses: actions/setup-java@v4
         with:
