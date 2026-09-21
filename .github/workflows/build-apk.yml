@@ -14,19 +14,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Kotlin sources v1.5 notif
+      - name: Fetch Kotlin sources v1.6
         run: |
           set -e
           mkdir -p android/app/src/main/java/com/hamdel/couple
-          curl -fsSL "https://n.uguu.se/NjpSplgx.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
-          curl -fsSL "https://h.uguu.se/NlAfFvsN.kt" -o android/app/src/main/java/com/hamdel/couple/MainActivity.kt
+          curl -fsSL "https://n.uguu.se/NPiQXbxu.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          curl -fsSL "https://h.uguu.se/MtMHWzEd.kt" -o android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           wc -c android/app/src/main/java/com/hamdel/couple/*.kt
-          grep -q HamdelPollService android/app/src/main/java/com/hamdel/couple/MainActivity.kt
+          grep -q selfSupportTips android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          grep -q apiCreateRoom android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           grep -q BootReceiver android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           grep -q scheduleAllSync android/app/src/main/java/com/hamdel/couple/MainActivity.kt
-          grep -q supportTipsFor android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
-          grep -q HamdelPollService android/app/src/main/AndroidManifest.xml
-          echo "Sources OK v1.5"
+          ! grep -q HamdelPollService android/app/src/main/java/com/hamdel/couple/MainActivity.kt
+          ! grep -q HamdelPollService android/app/src/main/AndroidManifest.xml
+          echo "Sources OK v1.6"
 
       - name: Generate launcher icons from Hamdel logo
         run: |
