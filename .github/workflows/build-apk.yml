@@ -14,13 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Kotlin sources v1.6.2
+      - name: Fetch Kotlin sources v1.6.2 logo
         run: |
           set -e
           mkdir -p android/app/src/main/java/com/hamdel/couple
-          curl -fsSL "https://n.uguu.se/NPiQXbxu.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
-          # patch LOGO_URL to original logo
-          sed -i 's|const val LOGO_URL = ".*"|const val LOGO_URL = "https://d.uguu.se/SQpyLyMb.png"|' android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          curl -fsSL "https://h.uguu.se/SZnfXSmL.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           curl -fsSL "https://h.uguu.se/MtMHWzEd.kt" -o android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           wc -c android/app/src/main/java/com/hamdel/couple/*.kt
           grep -q selfSupportTips android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
@@ -33,7 +31,6 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
           curl -fsSL "https://d.uguu.se/SQpyLyMb.png" -o /tmp/logo.png
-          file /tmp/logo.png || true
           for dens in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             case $dens in
               mdpi) sz=48;;
