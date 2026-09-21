@@ -14,19 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Kotlin sources v1.7.1 daily-fix
+      - name: Fetch Kotlin sources v1.7.2
         run: |
           set -e
           mkdir -p android/app/src/main/java/com/hamdel/couple
-          curl -fsSL "https://n.uguu.se/bbwUsJaD.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          curl -fsSL "https://n.uguu.se/ONqMfjBo.kt" -o android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           curl -fsSL "https://d.uguu.se/vMXNWNUp.kt" -o android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           wc -c android/app/src/main/java/com/hamdel/couple/*.kt
           grep -q pickDailyQuestion android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           grep -q FALLBACK_DAILY_QS android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
-          grep -q "ارسال جواب به همدل" android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
+          grep -q localDailyDraft android/app/src/main/java/com/hamdel/couple/HamdelApp.kt
           grep -q lastNudgeAt android/app/src/main/java/com/hamdel/couple/MainActivity.kt
           ! grep -q HamdelPollService android/app/src/main/java/com/hamdel/couple/MainActivity.kt
-          echo "Sources OK v1.7.1"
+          echo "Sources OK v1.7.2"
 
       - name: Restore original Hamdel logo icons
         run: |
